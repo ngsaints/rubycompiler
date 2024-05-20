@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Ruby Compiler with Opal</title>
+    <meta name="description" content="Compile and run Ruby code directly in your browser using Opal. Enjoy syntax highlighting and an easy-to-use interface.">
+    <meta name="keywords" content="Ruby, compiler, Opal, online Ruby compiler, run Ruby in browser, Ruby syntax highlighting">
+    <meta name="author" content="Your Name">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/ruby/ruby.min.js"></script>
+    <script src="https://cdn.opalrb.com/opal/current/opal.min.js"></script>
+    <script src="https://cdn.opalrb.com/opal/current/opal-parser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Online Ruby Compiler with Opal</h1>
+        <textarea id="ruby-code" placeholder="Write your Ruby code here..."></textarea>
+        <button id="run-code">Compile and Execute</button>
+        <h2>Output:</h2>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        // Initialize CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById('ruby-code'), {
+            mode: 'ruby',
+            lineNumbers: true,
+            theme: 'default'
+        });
+
+        document.getElementById('run-code').addEventListener('click', function() {
+            var rubyCode = editor.getValue();
+            var outputElement = document.getElementById('output');
+            outputElement.textContent = ""; // Clear previous output
+
+            try {
+                // Create a buffer to capture puts output
+                var buffer = [];
+
+                // Override puts method to capture output
+                Opal.top.$puts = function(str) {
+                    buffer.push(str);
+                };
+
+                // Compile and execute the Ruby code
+                var jsCode = Opal.compile(rubyCode);
+                new Function(jsCode)();
+
+                // Display the captured output
+                outputElement.textContent = buffer.join("\n");
+            } catch (e) {
+                outputElement.textContent = "Error: " + e.message;
+            }
+        });
+    </script>
+</body>
+</html>
