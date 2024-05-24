@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Ruby Compiler with Opal</title>
-    <meta name="description" content="Compile and run Ruby code directly in your browser using Opal. Enjoy syntax highlighting and an easy-to-use interface.">
-    <meta name="keywords" content="Ruby, compiler, Opal, online Ruby compiler, run Ruby in browser, Ruby syntax highlighting">
+    <title>Online Ruby Compiler - Run Ruby Code Instantly</title>
+    <meta name="description" content="Compile and run Ruby code instantly in your browser with our online Ruby compiler. Enjoy syntax highlighting and a user-friendly interface.">
+    <meta name="keywords" content="Ruby, Ruby compiler, online Ruby compiler, run Ruby online, Ruby syntax highlighting">
     <meta name="author" content="Your Name">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
@@ -19,6 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.5s ease;
         }
 
         .container {
@@ -27,33 +28,48 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             padding: 20px;
             width: 100%;
-            max-width: 700px; /* Increased max-width */
+            max-width: 700px;
             margin: 20px;
-            text-align: center; /* Center align the content */
+            text-align: center;
+            animation: fadeIn 1s ease;
         }
 
         .container img {
-            width: 100px; /* Adjust the size of the logo */
-            margin-bottom: 20px; /* Space between the logo and the title */
+            width: 100px;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 1.5rem; /* Decreased font size */
+            font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 20px;
             color: #555;
         }
 
+        h2 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+
         #editor {
-            height: 200px; /* Slightly increased height */
+            height: 200px;
             border: 1px solid #ccc;
             border-radius: 10px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
-        button {
+        #editor:focus {
+            border-color: #2196F3;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button, select {
             width: 100%;
             padding: 10px;
+            margin-top: 10px;
             background-color: #2196F3;
             border: none;
             border-radius: 10px;
@@ -64,8 +80,13 @@
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
+        button:hover, select:hover {
             background-color: #1E88E5;
+        }
+
+        button:active {
+            background-color: #1976D2;
+            transform: scale(0.98);
         }
 
         pre {
@@ -77,6 +98,11 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
     <script src="https://cdn.opalrb.com/opal/current/opal.min.js"></script>
@@ -84,10 +110,18 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Ruby_logo.svg" alt="Ruby Logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Ruby_logo.svg" alt="Ruby Logo" title="Ruby Programming Language Logo">
         <h1>Online Ruby Compiler with Opal</h1>
         <div id="editor"># Write your Ruby code here...</div>
         <button id="run-code" class="btn">Compile and Execute</button>
+        <button id="save-code" class="btn">Save Code</button>
+        <button id="load-code" class="btn">Load Code</button>
+        <select id="theme-selector">
+            <option value="ace/theme/textmate">Textmate</option>
+            <option value="ace/theme/monokai">Monokai</option>
+            <option value="ace/theme/github">GitHub</option>
+            <option value="ace/theme/twilight">Twilight</option>
+        </select>
         <h2>Output:</h2>
         <pre id="output"></pre>
     </div>
@@ -97,6 +131,7 @@
         editor.setTheme("ace/theme/textmate");
         editor.session.setMode("ace/mode/ruby");
 
+        // Compile and execute Ruby code
         document.getElementById('run-code').addEventListener('click', function() {
             var rubyCode = editor.getValue();
             var outputElement = document.getElementById('output');
@@ -120,6 +155,30 @@
             } catch (e) {
                 outputElement.textContent = "Error: " + e.message;
             }
+        });
+
+        // Save code to LocalStorage
+        document.getElementById('save-code').addEventListener('click', function() {
+            var rubyCode = editor.getValue();
+            localStorage.setItem('rubyCode', rubyCode);
+            alert('Code saved successfully!');
+        });
+
+        // Load code from LocalStorage
+        document.getElementById('load-code').addEventListener('click', function() {
+            var rubyCode = localStorage.getItem('rubyCode');
+            if (rubyCode) {
+                editor.setValue(rubyCode, -1); // -1 to move cursor to the start
+                alert('Code loaded successfully!');
+            } else {
+                alert('No code found in LocalStorage!');
+            }
+        });
+
+        // Change editor theme
+        document.getElementById('theme-selector').addEventListener('change', function() {
+            var theme = this.value;
+            editor.setTheme(theme);
         });
     </script>
 </body>
