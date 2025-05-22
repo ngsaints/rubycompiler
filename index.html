@@ -116,6 +116,10 @@
         <button id="run-code" class="btn">Compile and Execute</button>
         <button id="save-code" class="btn">Save Code</button>
         <button id="load-code" class="btn">Load Code</button>
+        <button id="clear-output" class="btn">Clear Output</button>
+        <button id="download-code" class="btn">Download Code</button>
+        <input type="file" id="upload-file" accept=".rb" style="display: none;">
+        <button id="upload-code-button" class="btn">Upload Code</button>
         <select id="theme-selector">
             <option value="ace/theme/textmate">Textmate</option>
             <option value="ace/theme/monokai">Monokai</option>
@@ -179,6 +183,52 @@
         document.getElementById('theme-selector').addEventListener('change', function() {
             var theme = this.value;
             editor.setTheme(theme);
+        });
+
+        // Clear output
+        document.getElementById('clear-output').addEventListener('click', function() {
+            document.getElementById('output').textContent = '';
+        });
+
+        // Download code
+        document.getElementById('download-code').addEventListener('click', function() {
+            var rubyCode = editor.getValue();
+            var blob = new Blob([rubyCode], { type: 'text/ruby' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'code.rb';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Upload code button triggers hidden file input
+        document.getElementById('upload-code-button').addEventListener('click', function() {
+            document.getElementById('upload-file').click();
+        });
+
+        // Handle file upload
+        document.getElementById('upload-file').addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            if (file) {
+                if (file.name.endsWith('.rb')) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        editor.setValue(e.target.result, -1); // -1 to move cursor to the start
+                        alert('File loaded successfully!');
+                    };
+                    reader.onerror = function(e) {
+                        alert('Error reading file: ' + e.target.error.name);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('Please select a Ruby file (.rb)');
+                }
+            }
+            // Reset the file input to allow uploading the same file again
+            event.target.value = null;
         });
     </script>
 </body>
