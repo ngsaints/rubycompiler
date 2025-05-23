@@ -7,96 +7,52 @@
     <meta name="description" content="Compile and run Ruby code instantly in your browser with our online Ruby compiler. Enjoy syntax highlighting and a user-friendly interface.">
     <meta name="keywords" content="Ruby, Ruby compiler, online Ruby compiler, run Ruby online, Ruby syntax highlighting">
     <meta name="author" content="Your Name">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f5;
-            color: #333;
-            margin: 0;
-            padding: 0;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: background-color 0.5s ease;
+            /* font-family, background-color, color, margin, padding are handled by Bulma or not needed */
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 100%;
-            max-width: 700px;
-            margin: 20px;
-            text-align: center;
-            animation: fadeIn 1s ease;
+            /* background, box-shadow, padding, width, max-width, margin are handled by Bulma classes like 'section' or 'box' or are defaults */
+            /* border-radius is handled by Bulma's elements (e.g. box has 6px) */
+            text-align: center; /* Kept for centering content within the container */
+            animation: fadeIn 1s ease; /* Kept for fade-in effect */
         }
 
-        .container img {
-            width: 100px;
-            margin-bottom: 20px;
-        }
+        /* .container img styling removed as it's handled by <figure class="image..."> and spacing utilities like mb-4 */
 
-        h1 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #555;
-        }
-
-        h2 {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #333;
-        }
+        /* h1, h2 styling removed as they are handled by Bulma's .title and .subtitle classes */
 
         #editor {
-            height: 200px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            height: 200px; /* Kept: Specific height for the editor */
+            border: 1px solid #ccc; /* Kept: Custom border for editor */
+            border-radius: 4px; /* Changed: Aligned with Bulma's default (e.g., for input, textarea) */
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Kept: Custom shadow for editor */
+            transition: all 0.3s ease; /* Kept: Transition for editor focus */
+            text-align: left; /* Ensure text inside editor is left-aligned */
         }
 
         #editor:focus {
-            border-color: #2196F3;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            border-color: #2196F3; /* Kept: Custom focus border color */
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Kept: Custom focus shadow */
+            /* border-radius will be 4px from #editor style */
         }
 
-        button, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #2196F3;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+        /* button, select, button:hover, button:active styling removed as Bulma classes handle these */
 
-        button:hover, select:hover {
-            background-color: #1E88E5;
-        }
-
-        button:active {
-            background-color: #1976D2;
-            transform: scale(0.98);
-        }
-
-        pre {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        pre#output {
+            /* background-color, padding, border-radius, border are handled by the parent div.box */
+            font-size: 1rem; /* Kept: Specific font size for output */
+            white-space: pre-wrap; /* Kept: Important for formatting output */
+            word-wrap: break-word; /* Kept: Important for formatting output */
+            text-align: left; /* Ensure output text is left-aligned if parent .container has text-align:center */
+            color: inherit; /* Ensure pre text color is consistent with Bulma's box content */
         }
 
         @keyframes fadeIn {
@@ -109,25 +65,52 @@
     <script src="https://cdn.opalrb.com/opal/current/opal-parser.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Ruby_logo.svg" alt="Ruby Logo" title="Ruby Programming Language Logo">
-        <h1>Online Ruby Compiler with Opal</h1>
-        <div id="editor"># Write your Ruby code here...</div>
-        <button id="run-code" class="btn">Compile and Execute</button>
-        <button id="save-code" class="btn">Save Code</button>
-        <button id="load-code" class="btn">Load Code</button>
-        <button id="clear-output" class="btn">Clear Output</button>
-        <button id="download-code" class="btn">Download Code</button>
-        <input type="file" id="upload-file" accept=".rb" style="display: none;">
-        <button id="upload-code-button" class="btn">Upload Code</button>
-        <select id="theme-selector">
-            <option value="ace/theme/textmate">Textmate</option>
-            <option value="ace/theme/monokai">Monokai</option>
-            <option value="ace/theme/github">GitHub</option>
-            <option value="ace/theme/twilight">Twilight</option>
-        </select>
-        <h2>Output:</h2>
-        <pre id="output"></pre>
+    <div class="container is-max-desktop section">
+        <figure class="image is-128x128 is-inline-block mb-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Ruby_logo.svg" alt="Ruby Logo" title="Ruby Programming Language Logo" style="width:100px;">
+        </figure>
+        <h1 class="title">Online Ruby Compiler with Opal</h1>
+        <div id="editor" class="mb-4"># Write your Ruby code here...</div>
+
+        <div class="field is-grouped is-grouped-multiline mb-4">
+            <p class="control">
+                <button id="run-code" class="button is-primary is-fullwidth">Compile and Execute</button>
+            </p>
+            <p class="control">
+                <button id="save-code" class="button is-link is-fullwidth">Save Code</button>
+            </p>
+            <p class="control">
+                <button id="load-code" class="button is-link is-light is-fullwidth">Load Code</button>
+            </p>
+            <p class="control">
+                <button id="clear-output" class="button is-danger is-light is-fullwidth">Clear Output</button>
+            </p>
+            <p class="control">
+                <button id="download-code" class="button is-info is-fullwidth">Download Code</button>
+            </p>
+            <p class="control">
+                <input type="file" id="upload-file" accept=".rb" style="display: none;">
+                <button id="upload-code-button" class="button is-info is-light is-fullwidth">Upload Code</button>
+            </p>
+        </div>
+
+        <div class="field mb-4">
+            <div class="control">
+                <div class="select is-info is-fullwidth">
+                    <select id="theme-selector">
+                        <option value="ace/theme/textmate">Textmate</option>
+                        <option value="ace/theme/monokai">Monokai</option>
+                        <option value="ace/theme/github">GitHub</option>
+                        <option value="ace/theme/twilight">Twilight</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="subtitle">Output:</h2>
+        <div class="box">
+            <pre id="output"></pre>
+        </div>
     </div>
     <script>
         // Initialize Ace Editor
