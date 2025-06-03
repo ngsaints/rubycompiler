@@ -142,8 +142,10 @@
                 var buffer = [];
 
                 // Override puts method to capture output
-                Opal.top.$puts = function(str) {
-                    buffer.push(str);
+                Opal.top.$puts = function() {
+                    for (var i = 0; i < arguments.length; i++) {
+                        buffer.push(arguments[i]);
+                    }
                 };
 
                 // Compile and execute the Ruby code
