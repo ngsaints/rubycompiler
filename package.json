@@ -1,0 +1,12 @@
+{
+  "name": "rubycompiler",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "puppeteer": "^21.3.8"
+  }
+}
