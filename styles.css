@@ -1,7 +1,4 @@
-/* Import Bootstrap for basic styling */
-@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css');
-
+/* Styles for the Ruby compiler interface. Uses Materialize and Ace Editor. */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f0f0f5;
@@ -34,7 +31,7 @@ h1 {
 }
 
 textarea {
-    display: none; /* Hide original textarea, CodeMirror will replace it */
+    display: none; /* Hide original textarea, Ace Editor will replace it */
 }
 
 button {
