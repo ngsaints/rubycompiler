@@ -137,6 +137,9 @@
             var outputElement = document.getElementById('output');
             outputElement.textContent = ""; // Clear previous output
 
+            // Save the original puts method
+            var originalPuts = Opal.top.$puts;
+
             try {
                 // Create a buffer to capture puts output
                 var buffer = [];
@@ -154,6 +157,9 @@
                 outputElement.textContent = buffer.join("\n");
             } catch (e) {
                 outputElement.textContent = "Error: " + e.message;
+            } finally {
+                // Restore the original puts method
+                Opal.top.$puts = originalPuts;
             }
         });
 
